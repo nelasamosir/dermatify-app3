@@ -1,0 +1,1 @@
+-e "__pycache__/\nvenv/\n.env\n*.log\n*.tmp\n*.DS_Store" 
