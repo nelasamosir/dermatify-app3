@@ -11,7 +11,7 @@ st.set_page_config(layout="wide")
 # ======== Load model CNN ========
 @st.cache_resource
 def load_cnn_model():
-    return load_model("best_model_skenario3_valacc.h5")
+    return load_model("Model_Skenario 3_Adam.h5")
 
 model = load_cnn_model()
 
