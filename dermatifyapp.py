@@ -127,9 +127,7 @@ with col3:
         <div class="desc-box">
             Aplikasi cerdas berbasis AI yang membantu mengenali jenis penyakit kulit hanya melalui gambar. 
             Dengan teknologi CNN (Convolutional Neural Network) yang telah dilatih khusus untuk mampu memberikan 
-            prediksi cepat dan akurat untuk lima jenis kondisi masalah kulit. Deteksi penyakit kulit yang dihasilkan 
-            oleh aplikasi ini bersifat pendukung dan tidak dimaksudkan sebagai pengganti diagnosis medis.
-            Apabila hasil klasifikasi tidak sesuai atau aplikasi tidak dapat mengenali kondisi kulit pengguna, 
-            disarankan untuk segera berkonsultasi dengan tenaga medis profesional.
+            prediksi cepat dan akurat untuk lima jenis kondisi masalah kulit, yaitu Cellulitis, Chicken Pox, Impetigo, Nail Fungus, dan Ringworm.
+            Deteksi penyakit kulit yang dihasilkan oleh aplikasi ini bersifat pendukung dan tidak dimaksudkan sebagai pengganti diagnosis medis.
         </div>
     """, unsafe_allow_html=True)
