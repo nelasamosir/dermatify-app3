@@ -11,7 +11,7 @@ st.set_page_config(layout="wide")
 # ======== Load model CNN ========
 @st.cache_resource
 def load_cnn_model():
-    return load_model("Model_Skenario 3_Adam_R80.h5")
+    return load_model("best_model_skenario3_valacc.h5")
 
 model = load_cnn_model()
 
@@ -23,9 +23,7 @@ deskripsi_penyakit = {
     "impetigo": "Impetigo adalah infeksi bakteri superfisial yang menular pada kulit yang umumnya terkait dengan Staphylococcus aureus, Streptococcus pyogenes grup A betahaemolytic, atau keduanya. Meskipun impetigo dapat sembuh dengan sendirinya tanpa intervensi, beberapa kasus dapat bertahan selama beberapa minggu. Pengobatan pada impetigo sering dimulai untuk mengurangi durasi dan penyebaran infeksi. Selain itu, impetigo dapat memiliki konsekuensi yang serius, karena dikaitkan dengan glomerulonefritis pasca infeksi dan selulitis, terutama pada populasi spesifik tertentu.",
     "nail fungus": "Nail fungus atau onikomikosis adalah infeksi jamur pada kuku tangan atau kaki yang menyebabkan kuku berubah warna, menebal, rapuh, dan terkadang berbau. Infeksi ini sering muncul akibat kelembapan berlebih, kebersihan yang buruk, atau pemakaian alas kaki tertutup terlalu lama. Penanganannya memerlukan obat antijamur topikal atau oral, dan pada kasus parah kuku bisa perlu dicabut untuk menghilangkan infeksi sepenuhnya. Onikomikosis atau tinea unguium dipandang lebih dari sekedar masalah kosmetik. Orang dengan kuku yang terinfeksi merasa tidak enak bahkan mungkin akan merasa malu. Infeksi jamur dari kuku dapat memicu infeksi bakteri sekunder, selulitis, reaksi idiopatik dan urtikaria kronis.",
     "ringworm": "Ringworm adalah penyakit yang disebabkan oleh infeksi jamur golongan dermatofita (berbagai spesies Trichophyton, Microsporum dan Epidermophyton) pada badan, tungkai dan lengan dan mempunyai gambaran morfologi yang khas. Pasien merasa gatal dan kelainan umumnya berbentuk bulat, berbatas tegas, terdiri atas macam-macam efloresensi kulit (polimorf) dengan bagian tepi lesi lebih jelas tanda peradangannya daripada bagian tengah. Beberapa lesi dapat bergabung dan mem-bentuk gambaran polisiklis. Lesi dapat meluas dan memberi gambaran yang tidak khas terutama pada pasien imunodefisiensi."
-    
 }
-
 
 # ======== Fungsi Deteksi Kulit ========
 def contains_skin(image_pil):
@@ -107,6 +105,20 @@ with col3:
     if hasil:
         st.markdown(f"**{hasil}**<br>Akurasi : {akurasi} %", unsafe_allow_html=True)
         st.markdown(f'<div class="desc-box">{deskripsi_penyakit.get(hasil, "Deskripsi tidak tersedia")}</div>', unsafe_allow_html=True)
+
+        # ======== Disclaimer ========
+        st.markdown("""
+            <div style='background-color:#FFF3CD; padding:12px; border-radius:8px; 
+                        border:1px solid #FFEEBA; margin-top:10px; font-size:15px; text-align:justify;'>
+                ⚠️ <b>Disclaimer:</b><br>
+                Hasil deteksi yang ditampilkan oleh aplikasi ini hanya bersifat 
+                <b>informasi awal</b> dan <b>tidak dimaksudkan sebagai pengganti diagnosis medis</b>. 
+                Apabila hasil klasifikasi tidak sesuai atau aplikasi tidak dapat mengenali kondisi kulit, 
+                <b>disarankan untuk segera berkonsultasi dengan tenaga medis profesional</b> 
+                untuk diagnosis dan penanganan lebih lanjut.
+            </div>
+        """, unsafe_allow_html=True)
+
     else:
         st.markdown("<div class='desc-box'>Silakan unggah gambar terlebih dahulu.</div>", unsafe_allow_html=True)
 
@@ -115,6 +127,9 @@ with col3:
         <div class="desc-box">
             Aplikasi cerdas berbasis AI yang membantu mengenali jenis penyakit kulit hanya melalui gambar. 
             Dengan teknologi CNN (Convolutional Neural Network) yang telah dilatih khusus untuk mampu memberikan 
-            prediksi cepat dan akurat untuk lima jenis kondisi masalah kulit.
+            prediksi cepat dan akurat untuk lima jenis kondisi masalah kulit. Deteksi penyakit kulit yang dihasilkan 
+            oleh aplikasi ini bersifat pendukung dan tidak dimaksudkan sebagai pengganti diagnosis medis.
+            Apabila hasil klasifikasi tidak sesuai atau aplikasi tidak dapat mengenali kondisi kulit pengguna, 
+            disarankan untuk segera berkonsultasi dengan tenaga medis profesional.
         </div>
     """, unsafe_allow_html=True)
