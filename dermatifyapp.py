@@ -40,7 +40,7 @@ def contains_skin(image_pil):
     return skin_ratio > 0.02  # minimal 2% area ada kulit
 
 # ======== Fungsi Prediksi ========
-def predict_image(image, threshold=0.8):
+def predict_image(image, threshold=0.89):
     if not contains_skin(image):
         return "Tidak terdefinisi", 0.0
 
