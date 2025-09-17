@@ -18,11 +18,11 @@ model = load_cnn_model()
 # ======== Label dan Deskripsi Penyakit ========
 labels = ['cellulitis', 'chickenpox', 'impetigo','nail fungus', 'ringworm']
 deskripsi_penyakit = {
-    "cellulitis": "Cellulitis adalah infeksi bakteri pada lapisan dalam kulit dan jaringan lunak di bawahnya...",
-    "chickenpox": "Chickenpox adalah penyakit menular yang disebabkan oleh virus Varicella-Zoster...",
-    "impetigo": "Impetigo adalah infeksi bakteri superfisial yang menular pada kulit...",
-    "nail fungus": "Nail fungus atau onikomikosis adalah infeksi jamur pada kuku tangan atau kaki...",
-    "ringworm": "Ringworm adalah penyakit yang disebabkan oleh infeksi jamur golongan dermatofita..."
+    "cellulitis": "Cellulitis adalah infeksi bakteri pada lapisan dalam kulit dan jaringan lunak di bawahnya, biasanya disebabkan oleh bakteri Streptococcus atau Staphylococcus. Gejalanya meliputi kemerahan, bengkak, nyeri, dan rasa hangat pada area yang terinfeksi, sering disertai demam. Penyakit ini paling sering terjadi akibat luka terbuka yang memungkinkan bakteri masuk. Penanganannya umumnya menggunakan antibiotik oral, dan kasus berat bisa memerlukan rawat inap.",
+    "chickenpox": "Chickenpox adalah penyakit menular yang disebabkan oleh virus Varicella-Zoster, ditandai dengan ruam gatal berbentuk bintik merah yang berkembang menjadi lenting berisi cairan. Penyakit ini menyebar sangat mudah melalui udara atau kontak langsung, dan sering disertai demam serta rasa lelah. Umumnya dialami anak-anak dan akan sembuh sendiri dalam 1–2 minggu, namun pada orang dewasa atau kasus berat bisa diberikan antivirus.",
+    "impetigo": "Impetigo adalah infeksi bakteri superfisial yang menular pada kulit yang umumnya terkait dengan Staphylococcus aureus, Streptococcus pyogenes grup A betahaemolytic, atau keduanya. Meskipun impetigo dapat sembuh dengan sendirinya tanpa intervensi, beberapa kasus dapat bertahan selama beberapa minggu. Pengobatan pada impetigo sering dimulai untuk mengurangi durasi dan penyebaran infeksi. Selain itu, impetigo dapat memiliki konsekuensi yang serius, karena dikaitkan dengan glomerulonefritis pasca infeksi dan selulitis, terutama pada populasi spesifik tertentu.",
+    "nail fungus": "Nail fungus atau onikomikosis adalah infeksi jamur pada kuku tangan atau kaki yang menyebabkan kuku berubah warna, menebal, rapuh, dan terkadang berbau. Infeksi ini sering muncul akibat kelembapan berlebih, kebersihan yang buruk, atau pemakaian alas kaki tertutup terlalu lama. Penanganannya memerlukan obat antijamur topikal atau oral, dan pada kasus parah kuku bisa perlu dicabut untuk menghilangkan infeksi sepenuhnya. Onikomikosis atau tinea unguium dipandang lebih dari sekedar masalah kosmetik. Orang dengan kuku yang terinfeksi merasa tidak enak bahkan mungkin akan merasa malu. Infeksi jamur dari kuku dapat memicu infeksi bakteri sekunder, selulitis, reaksi idiopatik dan urtikaria kronis.",
+    "ringworm": "Ringworm adalah penyakit yang disebabkan oleh infeksi jamur golongan dermatofita (berbagai spesies Trichophyton, Microsporum dan Epidermophyton) pada badan, tungkai dan lengan dan mempunyai gambaran morfologi yang khas. Pasien merasa gatal dan kelainan umumnya berbentuk bulat, berbatas tegas, terdiri atas macam-macam efloresensi kulit (polimorf) dengan bagian tepi lesi lebih jelas tanda peradangannya daripada bagian tengah. Beberapa lesi dapat bergabung dan mem-bentuk gambaran polisiklis. Lesi dapat meluas dan memberi gambaran yang tidak khas terutama pada pasien imunodefisiensi."
 }
 
 # ======== Fungsi Deteksi Kulit ========
@@ -39,8 +39,8 @@ def contains_skin(image_pil):
 
     return skin_ratio > 0.02  # minimal 2% area ada kulit
 
-# ======== Fungsi Prediksi dengan Threshold ========
-def predict_image(image, threshold=0.6):
+# ======== Fungsi Prediksi ========
+def predict_image(image):
     if not contains_skin(image):
         return "Tidak terdefinisi", 0.0
 
@@ -50,12 +50,7 @@ def predict_image(image, threshold=0.6):
 
     pred = model.predict(image)[0]
     idx = np.argmax(pred)
-    confidence = pred[idx]
-
-    if confidence < threshold:  # jika probabilitas terlalu rendah
-        return "Tidak terdefinisi", round(confidence * 100, 2)
-    else:
-        return labels[idx], round(confidence * 100, 2)
+    return labels[idx], round(pred[idx] * 100, 2)
 
 # ======== Styling ========
 def local_css():
@@ -95,7 +90,7 @@ with col2:
     if uploaded_file:
         image = Image.open(uploaded_file)
         st.image(image, caption="Gambar yang Diunggah", use_container_width=True)
-        hasil, akurasi = predict_image(image, threshold=0.6)
+        hasil, akurasi = predict_image(image)
     else:
         hasil, akurasi = None, None
 
@@ -108,12 +103,8 @@ with col3:
     st.markdown('<div class="subtitle">DESKRIPSI PENYAKIT KULIT</div>', unsafe_allow_html=True)
 
     if hasil:
-        if hasil == "Tidak terdefinisi":
-            st.markdown(f"**{hasil}**<br>Akurasi : {akurasi} %", unsafe_allow_html=True)
-            st.markdown('<div class="desc-box">Gambar yang diunggah tidak termasuk dalam 5 penyakit kulit utama yang dikenali aplikasi.</div>', unsafe_allow_html=True)
-        else:
-            st.markdown(f"**{hasil}**<br>Akurasi : {akurasi} %", unsafe_allow_html=True)
-            st.markdown(f'<div class="desc-box">{deskripsi_penyakit.get(hasil, "Deskripsi tidak tersedia")}</div>', unsafe_allow_html=True)
+        st.markdown(f"**{hasil}**<br>Akurasi : {akurasi} %", unsafe_allow_html=True)
+        st.markdown(f'<div class="desc-box">{deskripsi_penyakit.get(hasil, "Deskripsi tidak tersedia")}</div>', unsafe_allow_html=True)
 
         # ======== Disclaimer ========
         st.markdown("""
@@ -139,4 +130,4 @@ with col3:
             prediksi cepat dan akurat untuk lima jenis kondisi masalah kulit, yaitu Cellulitis, Chicken Pox, Impetigo, Nail Fungus, dan Ringworm.
             Deteksi penyakit kulit yang dihasilkan oleh aplikasi ini bersifat pendukung dan tidak dimaksudkan sebagai pengganti diagnosis medis.
         </div>
-    """, unsafe_allow_html=True)
+    """, unsafe_allow_html=True) kira2 kalau kode program ini diubah agar penyakit lain dianggap tidak terdefinisi, bisa gak kira2
