@@ -130,4 +130,4 @@ with col3:
             prediksi cepat dan akurat untuk lima jenis kondisi masalah kulit, yaitu Cellulitis, Chicken Pox, Impetigo, Nail Fungus, dan Ringworm.
             Deteksi penyakit kulit yang dihasilkan oleh aplikasi ini bersifat pendukung dan tidak dimaksudkan sebagai pengganti diagnosis medis.
         </div>
-    """, unsafe_allow_html=True) kira2 kalau kode program ini diubah agar penyakit lain dianggap tidak terdefinisi, bisa gak kira2
+    """, unsafe_allow_html=True)
